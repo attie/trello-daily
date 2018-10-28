@@ -1,0 +1,12 @@
+{
+	"auth": {
+		"api_key": "${YOUR_API_KEY}",
+		"api_secret": "${YOUR_API_SECRET}"
+	},
+	"daily": {
+		"board_id": "${TODO_BOARD_ID}",
+		"fallback_list_id": "${FALLBACK_LIST_ID}",
+		"days_future": 7,
+		"days_past": 2
+	}
+}
