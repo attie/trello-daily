@@ -47,7 +47,7 @@ class daily:
             board.add_list(date_str)
 
         lists = board.open_lists()
-        for i, date, date_str, date_today in [ ( _ + 1, __[0], __[1], __[2] ) for _, __ in enumerate(sorted(dates, key=lambda d: d[0])) ]:
+        for i, date, date_str, date_today in [ ( _ + 2, __[0], __[1], __[2] ) for _, __ in enumerate(sorted(dates, key=lambda d: d[0])) ]:
             for l in [ _ for _ in lists if _.name == date_str ]:
                 if l.pos == i:
                     continue
@@ -55,7 +55,9 @@ class daily:
                 print('Re-Ordering List [%s]...' % date_str )
                 l.move(i)
 
-        fallback_list.move(0)
+        if fallback_list.pos != 1:
+            print('Re-Ordering Fallback List...')
+            fallback_list.move(1)
 
     def get_date_range(self):
         date_now   = datetime.date.today()
