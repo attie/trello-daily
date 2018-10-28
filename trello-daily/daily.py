@@ -4,6 +4,7 @@ import datetime
 from trello import TrelloClient
 
 from trello_daily.config import oracle
+from trello_daily.date import date as td_date
 
 class daily:
     def __init__(self):
@@ -40,7 +41,7 @@ class daily:
             if l.id == oracle['daily']['fallback_list_id']:
                 continue
 
-            if l.name in [ _[1] for _ in dates ]:
+            if l.name in [ _.str for _ in dates ]:
                 continue
 
             print('Archive List [%s]...' % l.name )
@@ -49,8 +50,8 @@ class daily:
 
     def create_new_lists(self, board, dates):
         lists = board.open_lists()
-        for date, date_str, date_today in dates:
-            if date_str in [ _.name for _ in lists ]:
+        for date in dates:
+            if date.str in [ _.name for _ in lists ]:
                 continue
 
             print('Create List [%s]...' % date_str )
@@ -58,8 +59,8 @@ class daily:
 
     def order_lists(self, board, fallback_list, dates):
         lists = board.open_lists()
-        for i, date, date_str, date_today in [ ( _ + 2, __[0], __[1], __[2] ) for _, __ in enumerate(sorted(dates, key=lambda d: d[0])) ]:
-            for l in [ _ for _ in lists if _.name == date_str ]:
+        for i, date in [ ( i + 2, _ ) for i, _ in enumerate(sorted(dates, key=lambda d: d.date)) ]:
+            for l in [ _ for _ in lists if _.name == date.str ]:
                 if l.pos == i:
                     continue
 
@@ -75,5 +76,6 @@ class daily:
         date_start = date_now - datetime.timedelta(days = oracle['daily']['days_past'])
         date_end   = date_now + datetime.timedelta(days = oracle['daily']['days_future'])
         date_span  = (date_end - date_start).days + 1 # +1 because we want today too
+
         for date in [ date_start + datetime.timedelta(days = _) for _ in range(0, date_span) ]:
-            yield date, date.strftime('%a %d %b'), date == date_now
+            yield td_date(date)
