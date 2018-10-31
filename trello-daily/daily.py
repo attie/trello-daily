@@ -95,4 +95,4 @@ class daily:
         date_span  = (date_end - date_start).days + 1 # +1 because we want today too
 
         for date in [ date_start + datetime.timedelta(days = _) for _ in range(0, date_span) ]:
-            yield td_date(date)
+            yield td_date(date, today = date_now)
