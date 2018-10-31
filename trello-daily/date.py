@@ -6,6 +6,7 @@ class date:
     def __init__(self, date, today = None):
         self.date = date
         self.str = date.strftime('%a %d %b')
+        self.list = None # list as-in trello list...
 
         if today is None:
             today = datetime.date.today()
