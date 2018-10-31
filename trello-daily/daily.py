@@ -80,11 +80,12 @@ class daily:
                 if l.pos == i:
                     continue
 
-                print('Re-Ordering List [%s]...' % date_str )
+                print('Re-Ordering List [%s]... (%.3f -> %.3f)' % ( date.str, l.pos, i) )
                 l.move(i)
 
+        fallback_list.fetch()
         if fallback_list.pos != 1:
-            print('Re-Ordering Fallback List...')
+            print('Re-Ordering Fallback List... (%.3f -> %.3f)' % ( fallback_list.pos, 1 ))
             fallback_list.move(1)
 
     def get_date_range(self):
