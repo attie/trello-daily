@@ -1,3 +1,4 @@
+/config.json
 /trello-daily/**/*.pyc
 /trello-daily/__pycache__/
 
