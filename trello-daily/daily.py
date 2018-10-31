@@ -78,6 +78,7 @@ class daily:
         lists = board.open_lists()
         for i, date in [ ( i + 2, _ ) for i, _ in enumerate(sorted(dates, key=lambda d: d.date)) ]:
             for l in [ _ for _ in lists if _.name == date.str ]:
+                l.fetch()
                 if l.pos == i:
                     continue
 
