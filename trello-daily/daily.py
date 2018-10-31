@@ -63,11 +63,15 @@ class daily:
     def create_new_lists(self, board, dates):
         lists = board.open_lists()
         for date in dates:
-            if date.str in [ _.name for _ in lists ]:
+            l = [ _ for _ in lists if _.name == date.str ]
+            if len(l) == 1:
+                date.list = l[0]
                 continue
+            elif len(l) > 1:
+                raise Exception('multiple matching lists...')
 
-            print('Create List [%s]...' % date_str )
-            board.add_list(date_str)
+            print('Create List [%s]...' % date.str )
+            date.list = board.add_list(date.str)
 
     def order_lists(self, board, fallback_list, dates):
         lists = board.open_lists()
