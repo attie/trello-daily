@@ -24,6 +24,7 @@ class daily:
         self.close_old_lists(board, fallback_list, dates)
         self.create_new_lists(board, dates)
         self.order_lists(board, fallback_list, dates)
+        self.update_temporal_cards(board, dates)
 
     def validate_fallback_list(self, board):
         if oracle['daily']['fallback_list_id'] not in [ _.id for _ in board.all_lists() ]:
@@ -87,6 +88,61 @@ class daily:
         if fallback_list.pos != 1:
             print('Re-Ordering Fallback List... (%.3f -> %.3f)' % ( fallback_list.pos, 1 ))
             fallback_list.move(1)
+
+    def update_temporal_cards(self, board, dates):
+        board_labels = board.get_labels()
+
+        temporal_labels = {}
+        for phase in [ 'past', 'today', 'future' ]:
+            label_id = oracle['daily']['%s_label_id' % ( phase )]
+            temporal_labels[phase] = {
+                'label_id': label_id,
+                'label': next(filter(lambda _: _.id == label_id, board_labels))
+            }
+
+        for d in dates:
+            temporal_cards = [ *self.get_cards_by_label(d.list, [ _['label'] for _ in temporal_labels.values() ]) ]
+
+            if len(temporal_cards) == 0:
+                # make new
+                print('Creating Temporal Card for [%s]...' % ( d.str ))
+                card = d.list.add_card('...')
+            else:
+                # update
+                card = temporal_cards[0]
+
+                # remove extra
+                for rmcard in temporal_cards[1:]:
+                    print('Removing Extra Temporal Card for [%s]...' % ( d.str ))
+                    rmcard.delete()
+
+            card.set_pos('top')
+
+            if card.name != d.phase:
+                card.set_name(d.phase)
+
+            desired_label = temporal_labels[d.phase]
+
+            needs_label = True
+            for label in card.labels or []:
+                if label.id == desired_label['label_id']:
+                    needs_label = False
+                    continue
+                print('Removing Temporal Label from [%s]...' % ( d.str ))
+                card.remove_label(label)
+
+            if needs_label:
+                print('Adding Temporal Label to [%s]...' % ( d.str ))
+                card.add_label(desired_label['label'])
+
+    def get_cards_by_label(self, lst, labels):
+        yield from [ card for card in lst.list_cards() if self.card_has_one_of_labels(card, labels) ]
+
+    def card_has_one_of_labels(self, card, labels):
+        card_label_ids = [ _.id for _ in card.labels or [] ]
+        label_ids = [ _.id for _ in labels or [] ]
+        common = set(card_label_ids).intersection(label_ids)
+        return len(common) > 0
 
     def get_date_range(self):
         date_now   = datetime.date.today()
