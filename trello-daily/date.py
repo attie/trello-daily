@@ -3,11 +3,12 @@
 import datetime
 
 class date:
-    def __init__(self, date):
+    def __init__(self, date, today = None):
         self.date = date
         self.str = date.strftime('%a %d %b')
 
-        today = datetime.date.today()
+        if today is None:
+            today = datetime.date.today()
         self.past = date < today
         self.today = date == today
         self.future = date > today
