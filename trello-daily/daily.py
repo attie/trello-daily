@@ -20,6 +20,7 @@ class daily:
         dates = [ *self.get_date_range() ]
 
         fallback_list = self.validate_fallback_list(board)
+        self.validate_temporal_labels(board)
         self.close_old_lists(board, fallback_list, dates)
         self.create_new_lists(board, dates)
         self.order_lists(board, fallback_list, dates)
@@ -35,6 +36,17 @@ class daily:
             fallback_list.open()
 
         return fallback_list
+
+    def validate_temporal_labels(self, board):
+        label_ids = [ _.id for _ in board.get_labels() ]
+
+        for key in [
+            'past_label_id',
+            'today_label_id',
+            'future_label_id',
+        ]:
+            if oracle['daily'][key] not in label_ids:
+                raise Exception('temporal label is missing...')
 
     def close_old_lists(self, board, fallback_list, dates):
         for l in board.open_lists():

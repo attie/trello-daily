@@ -6,6 +6,11 @@
 	"daily": {
 		"board_id": "${TODO_BOARD_ID}",
 		"fallback_list_id": "${FALLBACK_LIST_ID}",
+
+		"past_label_id": "${PAST_LABEL_ID}",
+		"today_label_id": "${TODAY_LABEL_ID}",
+		"future_label_id": "${FUTURE_LABEL_ID}",
+
 		"days_future": 7,
 		"days_past": 2
 	}
