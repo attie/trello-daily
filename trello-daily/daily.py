@@ -82,20 +82,35 @@ class daily:
             date.list = board.add_list(date.str)
 
     def order_lists(self, board, fallback_list, dates):
-        lists = board.open_lists()
-        for i, date in [ ( i + 2, _ ) for i, _ in enumerate(sorted(dates, key=lambda d: d.date)) ]:
-            for l in [ _ for _ in lists if _.name == date.str ]:
-                l.fetch()
-                if l.pos == i:
-                    continue
+        # while there is no way to delete an old list, we will just push them
+        # out to a position >= 50...
 
-                print('Re-Ordering List [%s]... (%.3f -> %.3f)' % ( date.str, l.pos, i) )
-                l.move(i)
+        # TODO: think about moving cards left one list instead of creating new
+        #       lists, and "deleting" old lists
 
-        fallback_list.fetch()
-        if fallback_list.pos != 1:
-            print('Re-Ordering Fallback List... (%.3f -> %.3f)' % ( fallback_list.pos, 1 ))
-            fallback_list.move(1)
+        lists = board.all_lists()
+        for l in lists:
+            # update properties
+            l.fetch()
+
+            if l.id == fallback_list.id:
+                # the fallback list gets special treatment
+                new_pos = None if l.pos == 1 else 1
+
+            else:
+                # pick out the date... we'll get None if the title isn't a
+                # date in our range
+                date = next((_ for _ in dates if _ == l.name), None)
+
+                if date is None:
+                    new_pos = None if l.pos >= 50       else 50
+                else:
+                    new_pos = None if l.pos == date.pos else date.pos
+
+            # move the list
+            if new_pos is not None:
+                print('Re-Ordering List [%s]... (%.3f -> %.3f)' % ( l.name, l.pos, new_pos) )
+                l.move(new_pos)
 
     def update_temporal_cards(self, board, dates):
         board_labels = board.get_labels()
