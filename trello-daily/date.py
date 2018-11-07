@@ -7,6 +7,7 @@ class date:
         self.date = date
         self.str = date.strftime('%a %d %b')
         self.list = None # list as-in trello list...
+        self.pos = None # pos as-in trello position...
 
         if today is None:
             today = datetime.date.today()

@@ -158,5 +158,10 @@ class daily:
         date_end   = date_now + datetime.timedelta(days = oracle['daily']['days_future'])
         date_span  = (date_end - date_start).days + 1 # +1 because we want today too
 
-        for date in [ date_start + datetime.timedelta(days = _) for _ in range(0, date_span) ]:
-            yield td_date(date, today = date_now)
+        for offset in range(0, date_span):
+            date = date_start + datetime.timedelta(days = offset)
+
+            d = td_date(date, today = date_now)
+            d.pos = offset + 2
+
+            yield d
