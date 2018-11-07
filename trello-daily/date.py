@@ -26,3 +26,5 @@ class date:
     def __str__(self):
         return self.str
 
+    def __repr__(self):
+        return '<trello-daily-date "%s">' % ( str(self) )
