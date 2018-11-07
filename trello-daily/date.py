@@ -28,3 +28,8 @@ class date:
 
     def __repr__(self):
         return '<trello-daily-date "%s">' % ( str(self) )
+
+    def __eq__(self, other):
+        if isinstance(other, str):
+            return str(self) == other
+        return super().__eq__(other)
