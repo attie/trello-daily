@@ -20,11 +20,13 @@ class daily:
         dates = [ *self.get_date_range() ]
 
         fallback_list = self.validate_fallback_list(board)
+
         self.validate_temporal_labels(board)
         self.close_old_lists(board, fallback_list, dates)
         self.create_new_lists(board, dates)
         self.order_lists(board, fallback_list, dates)
         self.update_temporal_cards(board, dates)
+        self.delete_temporal_cards(fallback_list)
 
     def validate_fallback_list(self, board):
         if oracle['daily']['fallback_list_id'] not in [ _.id for _ in board.all_lists() ]:
@@ -155,6 +157,13 @@ class daily:
             if needs_label:
                 print('Adding Temporal Label to [%s]...' % ( d.str ))
                 card.add_label(desired_label['label'])
+
+    def delete_temporal_cards(self, trello_list):
+        temporal_labels = self.get_temporal_labels(trello_list.board)
+
+        for card in self.get_cards_by_label(trello_list, [ _['label'] for _ in temporal_labels.values() ]):
+            print('Removing Temporal Card from fallback list...')
+            card.delete()
 
     def get_cards_by_label(self, trello_list, labels):
         yield from [ card for card in trello_list.list_cards() if self.card_has_one_of_labels(card, labels) ]
