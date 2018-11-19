@@ -105,7 +105,7 @@ class daily:
                 print('Re-Ordering List [%s]... (%.3f -> %.3f)' % ( l.name, l.pos, new_pos) )
                 l.move(new_pos)
 
-    def update_temporal_cards(self, board, dates):
+    def get_temporal_labels(self, board):
         board_labels = board.get_labels()
 
         temporal_labels = {}
@@ -115,6 +115,11 @@ class daily:
                 'label_id': label_id,
                 'label': next(filter(lambda _: _.id == label_id, board_labels))
             }
+
+        return temporal_labels
+
+    def update_temporal_cards(self, board, dates):
+        temporal_labels = self.get_temporal_labels(board)
 
         for d in dates:
             temporal_cards = [ *self.get_cards_by_label(d.list, [ _['label'] for _ in temporal_labels.values() ]) ]
