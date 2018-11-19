@@ -23,14 +23,7 @@ class daily:
         self.validate_temporal_labels(board)
         self.close_old_lists(board, fallback_list, dates)
         self.create_new_lists(board, dates)
-
-        # for some reason, ordering the lists once isn't good enough... the
-        # result can still be that they are out of order (typically the list
-        # that should be furthest left is far right, with a high position
-        # like 16386). running twice seems to do the trick though - go figure
         self.order_lists(board, fallback_list, dates)
-        self.order_lists(board, fallback_list, dates)
-
         self.update_temporal_cards(board, dates)
 
     def validate_fallback_list(self, board):
