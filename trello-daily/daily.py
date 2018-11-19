@@ -151,8 +151,8 @@ class daily:
                 print('Adding Temporal Label to [%s]...' % ( d.str ))
                 card.add_label(desired_label['label'])
 
-    def get_cards_by_label(self, lst, labels):
-        yield from [ card for card in lst.list_cards() if self.card_has_one_of_labels(card, labels) ]
+    def get_cards_by_label(self, trello_list, labels):
+        yield from [ card for card in trello_list.list_cards() if self.card_has_one_of_labels(card, labels) ]
 
     def card_has_one_of_labels(self, card, labels):
         card_label_ids = [ _.id for _ in card.labels or [] ]
