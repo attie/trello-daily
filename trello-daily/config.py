@@ -1,6 +1,7 @@
 #!/bin/false
 
 from json import load as json_load
+from trello_daily.args import args
 
 class Config:
     def __init__(self, filename = './config.json'):
@@ -29,4 +30,4 @@ class Config:
     def __contains__(self, key):
         return key in self.config
 
-oracle = Config()
+oracle = Config(filename = args.config)
