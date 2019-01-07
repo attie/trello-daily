@@ -1,19 +1,14 @@
 #!/bin/false
 
 import datetime
-from trello import TrelloClient
 
 from trello_daily.config import oracle
+from trello_daily.trello_client import trello_client
 from trello_daily.date import date as td_date
 
 class daily:
     def __init__(self):
-        self.tclient = TrelloClient(
-            api_key = oracle['auth']['api_key'],
-            api_secret = oracle['auth']['api_secret'],
-            token = None,
-            token_secret = None,
-        )
+        self.tclient = trello_client
 
     def run(self):
         board = self.tclient.get_board(oracle['daily']['board_id'])
