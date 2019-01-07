@@ -12,6 +12,14 @@ if __name__ == '__main__':
 # ---
 
 if __name__ == '__main__':
-    from trello_daily.daily import daily
-    x = daily()
-    x.run()
+    from trello_daily.args import args
+
+    if args.mode in [ 'daily' ]:
+        from trello_daily.daily import Daily
+        x = Daily()
+        x.run()
+
+    elif args.mode in [ 'show_boards', 'show_lists', 'show_labels' ]:
+        from trello_daily.show import Show
+        x = Show()
+        getattr(x, args.mode)()

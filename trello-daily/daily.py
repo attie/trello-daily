@@ -6,7 +6,7 @@ from trello_daily.config import oracle
 from trello_daily.trello_client import trello_client
 from trello_daily.date import date as td_date
 
-class daily:
+class Daily:
     def __init__(self):
         self.tclient = trello_client
 
